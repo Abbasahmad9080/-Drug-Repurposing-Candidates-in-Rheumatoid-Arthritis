@@ -1,0 +1,1207 @@
+############################################################
+# INTEGRATED RNA-seq + MACHINE LEARNING ANALYSIS
+# Rheumatoid Arthritis CD14+ Monocytes
+############################################################
+
+# ==========================================================
+# 0. INSTALL / LOAD PACKAGES
+# ==========================================================
+
+# Uncomment the following lines if packages are not installed
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+#
+# BiocManager::install(c(
+#   "DESeq2",
+#   "clusterProfiler",
+#   "org.Hs.eg.db",
+#   "enrichplot",
+#   "EnhancedVolcano"
+# ))
+#
+# install.packages(c(
+#   "tidyverse",
+#   "pheatmap",
+#   "RColorBrewer",
+#   "glmnet",
+#   "randomForest",
+#   "caret",
+#   "e1071",
+#   "pROC",
+#   "VennDiagram",
+#   "ggplot2",
+#   "dplyr",
+#   "readr",
+#   "openxlsx"
+# ))
+
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(glmnet)
+library(randomForest)
+library(caret)
+library(e1071)
+library(pROC)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(VennDiagram)
+library(openxlsx)
+library(ggplot2)
+
+set.seed(1234)
+
+
+# ==========================================================
+# 1. CREATE OUTPUT DIRECTORIES
+# ==========================================================
+
+dir.create("RA_Analysis", showWarnings = FALSE)
+
+folders <- c(
+  "01_QC",
+  "02_Normalization",
+  "03_DEG",
+  "04_Enrichment",
+  "05_PPI",
+  "06_LASSO",
+  "07_RandomForest",
+  "08_SVM_RFE",
+  "09_Biomarker_Panel",
+  "10_ROC",
+  "11_Drug_Repurposing",
+  "12_Final_Figures",
+  "13_Final_Tables"
+)
+
+for (x in folders) {
+  dir.create(file.path("RA_Analysis", x),
+             recursive = TRUE,
+             showWarnings = FALSE)
+}
+
+
+# ==========================================================
+# 2. IMPORT RAW COUNT DATA
+# ==========================================================
+
+counts <- read.csv(
+  "counts.csv",
+  header = TRUE,
+  row.names = 1,
+  check.names = FALSE
+)
+
+metadata <- read.csv(
+  "metadata.csv",
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+head(counts)
+head(metadata)
+
+# Check dimensions
+dim(counts)
+dim(metadata)
+
+# ==========================================================
+# 3. MATCH SAMPLE NAMES
+# ==========================================================
+
+metadata$SampleID <- as.character(metadata$SampleID)
+
+common_samples <- intersect(
+  colnames(counts),
+  metadata$SampleID
+)
+
+counts <- counts[, common_samples]
+
+metadata <- metadata[
+  match(common_samples, metadata$SampleID),
+]
+
+rownames(metadata) <- metadata$SampleID
+
+metadata$Group <- factor(
+  metadata$Group,
+  levels = c("Control", "RA")
+)
+
+# Check
+table(metadata$Group)
+
+stopifnot(
+  all(colnames(counts) == rownames(metadata))
+)
+
+
+# ==========================================================
+# 4. BASIC COUNT QC
+# ==========================================================
+
+library_size <- colSums(counts)
+
+qc_table <- data.frame(
+  Sample = names(library_size),
+  Library_Size = library_size,
+  Group = metadata$Group
+)
+
+write.csv(
+  qc_table,
+  "RA_Analysis/01_QC/Library_Size.csv",
+  row.names = FALSE
+)
+
+pdf(
+  "RA_Analysis/01_QC/Library_Size.pdf",
+  width = 8,
+  height = 6
+)
+
+barplot(
+  library_size,
+  las = 2,
+  main = "RNA-seq Library Size",
+  ylab = "Total Counts"
+)
+
+dev.off()
+
+
+# ==========================================================
+# 5. FILTER LOW-COUNT GENES
+# ==========================================================
+
+keep <- rowSums(counts >= 10) >= 3
+
+counts_filtered <- counts[keep, ]
+
+cat(
+  "Genes before filtering:",
+  nrow(counts),
+  "\n"
+)
+
+cat(
+  "Genes after filtering:",
+  nrow(counts_filtered),
+  "\n"
+)
+
+write.csv(
+  counts_filtered,
+  "RA_Analysis/02_Normalization/Filtered_Counts.csv"
+)
+
+
+# ==========================================================
+# 6. DESeq2 OBJECT
+# ==========================================================
+
+dds <- DESeqDataSetFromMatrix(
+  countData = round(counts_filtered),
+  colData = metadata,
+  design = ~ Group
+)
+
+dds <- DESeq(dds)
+
+saveRDS(
+  dds,
+  "RA_Analysis/02_Normalization/DESeq2_Object.rds"
+)
+
+
+# ==========================================================
+# 7. VST NORMALIZATION
+# ==========================================================
+
+vsd <- vst(
+  dds,
+  blind = FALSE
+)
+
+vst_matrix <- assay(vsd)
+
+write.csv(
+  vst_matrix,
+  "RA_Analysis/02_Normalization/VST_Normalized_Expression.csv"
+)
+
+
+# ==========================================================
+# 8. PCA
+# ==========================================================
+
+pdf(
+  "RA_Analysis/01_QC/PCA.pdf",
+  width = 8,
+  height = 6
+)
+
+pcaData <- plotPCA(
+  vsd,
+  intgroup = "Group",
+  returnData = TRUE
+)
+
+percentVar <- round(
+  100 * attr(pcaData, "percentVar")
+)
+
+ggplot(
+  pcaData,
+  aes(
+    x = PC1,
+    y = PC2,
+    color = Group,
+    label = name
+  )
+) +
+  geom_point(size = 4) +
+  labs(
+    title = "PCA of CD14+ Monocyte RNA-seq Data",
+    x = paste0("PC1: ", percentVar[1], "%"),
+    y = paste0("PC2: ", percentVar[2], "%")
+  ) +
+  theme_classic()
+
+dev.off()
+
+
+# ==========================================================
+# 9. SAMPLE CORRELATION HEATMAP
+# ==========================================================
+
+sample_cor <- cor(vst_matrix)
+
+pdf(
+  "RA_Analysis/01_QC/Sample_Correlation.pdf",
+  width = 8,
+  height = 7
+)
+
+pheatmap(
+  sample_cor,
+  main = "Sample Correlation",
+  annotation_col = metadata["Group"]
+)
+
+dev.off()
+
+
+# ==========================================================
+# 10. DIFFERENTIAL EXPRESSION ANALYSIS
+# ==========================================================
+
+res <- results(
+  dds,
+  contrast = c("Group", "RA", "Control"),
+  alpha = 0.05
+)
+
+res <- as.data.frame(res)
+
+res$Gene <- rownames(res)
+
+res <- res %>%
+  arrange(padj)
+
+write.csv(
+  res,
+  "RA_Analysis/03_DEG/All_DEGs.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 11. IDENTIFY SIGNIFICANT DEGs
+# ==========================================================
+
+deg <- res %>%
+  filter(
+    !is.na(padj),
+    padj < 0.05,
+    abs(log2FoldChange) >= 1
+  )
+
+upregulated <- deg %>%
+  filter(log2FoldChange >= 1)
+
+downregulated <- deg %>%
+  filter(log2FoldChange <= -1)
+
+cat("Total DEGs:", nrow(deg), "\n")
+cat("Upregulated:", nrow(upregulated), "\n")
+cat("Downregulated:", nrow(downregulated), "\n")
+
+write.csv(
+  deg,
+  "RA_Analysis/03_DEG/Significant_DEGs.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  upregulated,
+  "RA_Analysis/03_DEG/Upregulated_DEGs.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  downregulated,
+  "RA_Analysis/03_DEG/Downregulated_DEGs.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 12. VOLCANO PLOT
+# ==========================================================
+
+res$Significance <- "Not significant"
+
+res$Significance[
+  res$padj < 0.05 &
+  res$log2FoldChange >= 1
+] <- "Upregulated"
+
+res$Significance[
+  res$padj < 0.05 &
+  res$log2FoldChange <= -1
+] <- "Downregulated"
+
+pdf(
+  "RA_Analysis/03_DEG/Volcano_Plot.pdf",
+  width = 9,
+  height = 7
+)
+
+ggplot(
+  res,
+  aes(
+    x = log2FoldChange,
+    y = -log10(padj),
+    color = Significance
+  )
+) +
+  geom_point(alpha = 0.6) +
+  geom_vline(
+    xintercept = c(-1, 1),
+    linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = -log10(0.05),
+    linetype = "dashed"
+  ) +
+  theme_classic() +
+  labs(
+    title = "Differentially Expressed Genes",
+    x = "log2 Fold Change",
+    y = "-log10 Adjusted P-value"
+  )
+
+dev.off()
+
+
+# ==========================================================
+# 13. HEATMAP OF TOP DEGs
+# ==========================================================
+
+top_genes <- deg %>%
+  arrange(padj) %>%
+  head(50) %>%
+  pull(Gene)
+
+heatmap_matrix <- vst_matrix[
+  intersect(top_genes, rownames(vst_matrix)),
+]
+
+heatmap_matrix <- t(
+  scale(t(heatmap_matrix))
+)
+
+pdf(
+  "RA_Analysis/03_DEG/Top50_DEG_Heatmap.pdf",
+  width = 9,
+  height = 12
+)
+
+pheatmap(
+  heatmap_matrix,
+  annotation_col = metadata["Group"],
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  main = "Top 50 Differentially Expressed Genes"
+)
+
+dev.off()
+
+
+# ==========================================================
+# 14. GENE ID CONVERSION
+# ==========================================================
+
+gene_symbols <- deg$Gene
+
+gene_conversion <- bitr(
+  gene_symbols,
+  fromType = "SYMBOL",
+  toType = "ENTREZID",
+  OrgDb = org.Hs.eg.db
+)
+
+write.csv(
+  gene_conversion,
+  "RA_Analysis/04_Enrichment/Gene_ID_Conversion.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 15. GO ENRICHMENT
+# ==========================================================
+
+ego <- enrichGO(
+  gene = gene_conversion$ENTREZID,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENTREZID",
+  ont = "ALL",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
+
+write.csv(
+  as.data.frame(ego),
+  "RA_Analysis/04_Enrichment/GO_Enrichment.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 16. GO DOTPLOT
+# ==========================================================
+
+pdf(
+  "RA_Analysis/04_Enrichment/GO_Dotplot.pdf",
+  width = 10,
+  height = 8
+)
+
+dotplot(
+  ego,
+  showCategory = 20
+)
+
+dev.off()
+
+
+# ==========================================================
+# 17. KEGG ENRICHMENT
+# ==========================================================
+
+ekegg <- enrichKEGG(
+  gene = gene_conversion$ENTREZID,
+  organism = "hsa",
+  pvalueCutoff = 0.05
+)
+
+write.csv(
+  as.data.frame(ekegg),
+  "RA_Analysis/04_Enrichment/KEGG_Enrichment.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 18. KEGG DOTPLOT
+# ==========================================================
+
+pdf(
+  "RA_Analysis/04_Enrichment/KEGG_Dotplot.pdf",
+  width = 10,
+  height = 8
+)
+
+dotplot(
+  ekegg,
+  showCategory = 20
+)
+
+dev.off()
+
+
+# ==========================================================
+# 19. PPI INPUT
+# ==========================================================
+
+# Export significant DEGs for STRING/PPI analysis
+
+ppi_genes <- unique(deg$Gene)
+
+write.table(
+  ppi_genes,
+  "RA_Analysis/05_PPI/PPI_Genes.txt",
+  row.names = FALSE,
+  col.names = FALSE,
+  quote = FALSE
+)
+
+
+# ==========================================================
+# IMPORTANT:
+# PPI NETWORK
+# ==========================================================
+#
+# Upload PPI_Genes.txt to STRING:
+#
+# https://string-db.org/
+#
+# Download STRING network table.
+#
+# Then import it below if required.
+
+
+# ==========================================================
+# 20. HUB GENE CANDIDATES
+# ==========================================================
+
+# If you have a STRING network file containing:
+# preferredName_A
+# preferredName_B
+# combined_score
+
+# Uncomment and modify according to your STRING output:
+
+# string <- read.csv(
+#   "STRING_network.csv",
+#   stringsAsFactors = FALSE
+# )
+
+# Calculate node degree:
+
+# edges <- rbind(
+#   data.frame(
+#     Gene = string$preferredName_A,
+#     Partner = string$preferredName_B
+#   ),
+#   data.frame(
+#     Gene = string$preferredName_B,
+#     Partner = string$preferredName_A
+#   )
+# )
+
+# degree_table <- edges %>%
+#   count(Gene, name = "Degree") %>%
+#   arrange(desc(Degree))
+
+# write.csv(
+#   degree_table,
+#   "RA_Analysis/05_PPI/Hub_Genes.csv",
+#   row.names = FALSE
+# )
+
+
+# ==========================================================
+# 21. MACHINE LEARNING DATASET
+# ==========================================================
+
+# Use normalized expression data
+
+ml_matrix <- as.data.frame(
+  t(vst_matrix)
+)
+
+ml_matrix$Group <- metadata$Group
+
+ml_matrix$Group <- factor(
+  ml_matrix$Group,
+  levels = c("Control", "RA")
+)
+
+# Keep genes that are available
+ml_genes <- setdiff(
+  colnames(ml_matrix),
+  "Group"
+)
+
+# Remove zero-variance predictors
+nzv <- nearZeroVar(
+  ml_matrix[, ml_genes],
+  saveMetrics = TRUE
+)
+
+ml_genes <- ml_genes[
+  !nzv$zeroVar
+]
+
+ml_data <- ml_matrix[
+  ,
+  c(ml_genes, "Group")
+]
+
+
+# ==========================================================
+# 22. LASSO LOGISTIC REGRESSION
+# ==========================================================
+
+x <- as.matrix(
+  ml_data[, ml_genes]
+)
+
+y <- ifelse(
+  ml_data$Group == "RA",
+  1,
+  0
+)
+
+cv_lasso <- cv.glmnet(
+  x,
+  y,
+  family = "binomial",
+  alpha = 1,
+  nfolds = min(10, nrow(x)),
+  type.measure = "class"
+)
+
+pdf(
+  "RA_Analysis/06_LASSO/LASSO_CV.pdf",
+  width = 8,
+  height = 6
+)
+
+plot(cv_lasso)
+
+dev.off()
+
+lasso_model <- glmnet(
+  x,
+  y,
+  family = "binomial",
+  alpha = 1
+)
+
+lasso_coef <- coef(
+  cv_lasso,
+  s = "lambda.min"
+)
+
+lasso_genes <- rownames(
+  lasso_coef
+)[
+  as.numeric(lasso_coef) != 0
+]
+
+lasso_genes <- setdiff(
+  lasso_genes,
+  "(Intercept)"
+)
+
+write.csv(
+  data.frame(Gene = lasso_genes),
+  "RA_Analysis/06_LASSO/LASSO_Selected_Genes.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 23. RANDOM FOREST
+# ==========================================================
+
+# Select DEGs to reduce dimensionality
+
+candidate_genes <- intersect(
+  deg$Gene,
+  colnames(ml_data)
+)
+
+rf_data <- ml_data[
+  ,
+  c(candidate_genes, "Group")
+]
+
+rf_model <- randomForest(
+  Group ~ .,
+  data = rf_data,
+  ntree = 1000,
+  importance = TRUE
+)
+
+rf_importance <- as.data.frame(
+  importance(rf_model)
+)
+
+rf_importance$Gene <- rownames(
+  rf_importance
+)
+
+rf_importance <- rf_importance %>%
+  arrange(desc(MeanDecreaseGini))
+
+write.csv(
+  rf_importance,
+  "RA_Analysis/07_RandomForest/RandomForest_Importance.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 24. TOP RANDOM FOREST GENES
+# ==========================================================
+
+top_rf <- rf_importance %>%
+  head(30)
+
+pdf(
+  "RA_Analysis/07_RandomForest/Top_RF_Genes.pdf",
+  width = 9,
+  height = 7
+)
+
+ggplot(
+  top_rf,
+  aes(
+    x = reorder(Gene, MeanDecreaseGini),
+    y = MeanDecreaseGini
+  )
+) +
+  geom_col() +
+  coord_flip() +
+  theme_classic() +
+  labs(
+    title = "Top Random Forest Features",
+    x = "Gene",
+    y = "Mean Decrease in Gini"
+  )
+
+dev.off()
+
+
+# ==========================================================
+# 25. SVM-RFE
+# ==========================================================
+
+# Use candidate DEGs
+
+svm_genes <- candidate_genes
+
+svm_data <- ml_data[
+  ,
+  c(svm_genes, "Group")
+]
+
+ctrl <- rfeControl(
+  functions = caretFuncs,
+  method = "LOOCV",
+  verbose = FALSE
+)
+
+sizes <- unique(
+  c(
+    2,
+    3,
+    4,
+    5,
+    10,
+    20,
+    30
+  )
+)
+
+sizes <- sizes[
+  sizes <= length(svm_genes)
+]
+
+svm_rfe <- rfe(
+  x = svm_data[, svm_genes],
+  y = svm_data$Group,
+  sizes = sizes,
+  rfeControl = ctrl
+)
+
+pdf(
+  "RA_Analysis/08_SVM_RFE/SVM_RFE.pdf",
+  width = 8,
+  height = 6
+)
+
+plot(svm_rfe)
+
+dev.off()
+
+svm_selected <- predictors(
+  svm_rfe
+)
+
+write.csv(
+  data.frame(Gene = svm_selected),
+  "RA_Analysis/08_SVM_RFE/SVM_RFE_Selected_Genes.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 26. CONSENSUS BIOMARKERS
+# ==========================================================
+
+rf_genes <- rf_importance$Gene
+
+consensus <- Reduce(
+  intersect,
+  list(
+    lasso_genes,
+    rf_genes,
+    svm_selected
+  )
+)
+
+write.csv(
+  data.frame(Gene = consensus),
+  "RA_Analysis/09_Biomarker_Panel/Consensus_Genes.csv",
+  row.names = FALSE
+)
+
+print(consensus)
+
+
+# ==========================================================
+# 27. FOUR-GENE PANEL
+# ==========================================================
+
+four_gene_panel <- c(
+  "IL1B",
+  "TNF",
+  "IL6",
+  "CTNNB1"
+)
+
+available_panel <- intersect(
+  four_gene_panel,
+  rownames(vst_matrix)
+)
+
+print(available_panel)
+
+panel_expression <- t(
+  vst_matrix[
+    available_panel,
+    ,
+    drop = FALSE
+  ]
+)
+
+panel_expression <- as.data.frame(
+  panel_expression
+)
+
+panel_expression$Group <- metadata$Group
+
+write.csv(
+  panel_expression,
+  "RA_Analysis/09_Biomarker_Panel/Four_Gene_Panel_Expression.csv"
+)
+
+
+# ==========================================================
+# 28. ROC ANALYSIS — INDIVIDUAL GENES
+# ==========================================================
+
+roc_results <- list()
+
+for (gene in available_panel) {
+
+  expression <- as.numeric(
+    vst_matrix[gene, ]
+  )
+
+  roc_obj <- roc(
+    response = metadata$Group,
+    predictor = expression,
+    levels = c("Control", "RA"),
+    direction = "<"
+  )
+
+  auc_value <- auc(roc_obj)
+
+  roc_results[[gene]] <- list(
+    ROC = roc_obj,
+    AUC = as.numeric(auc_value)
+  )
+}
+
+roc_table <- data.frame(
+  Gene = names(roc_results),
+  AUC = sapply(
+    roc_results,
+    function(x) x$AUC
+  )
+)
+
+write.csv(
+  roc_table,
+  "RA_Analysis/10_ROC/Individual_Gene_AUC.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 29. COMBINED ROC PLOT
+# ==========================================================
+
+pdf(
+  "RA_Analysis/10_ROC/Individual_Gene_ROC.pdf",
+  width = 8,
+  height = 7
+)
+
+plot(
+  roc_results[[1]]$ROC,
+  main = "ROC Analysis of Four-Gene Biomarker Panel"
+)
+
+if (length(roc_results) > 1) {
+
+  for (i in 2:length(roc_results)) {
+
+    lines(
+      roc_results[[i]]$ROC
+    )
+  }
+}
+
+legend(
+  "bottomright",
+  legend = paste0(
+    names(roc_results),
+    " AUC = ",
+    round(
+      sapply(
+        roc_results,
+        function(x) x$AUC
+      ),
+      3
+    )
+  )
+)
+
+dev.off()
+
+
+# ==========================================================
+# 30. FOUR-GENE COMBINED MODEL
+# ==========================================================
+
+panel_df <- as.data.frame(
+  t(vst_matrix[available_panel, ])
+)
+
+panel_df$Group <- metadata$Group
+
+panel_model <- glm(
+  Group ~ .,
+  data = panel_df,
+  family = binomial
+)
+
+panel_probability <- predict(
+  panel_model,
+  type = "response"
+)
+
+panel_roc <- roc(
+  metadata$Group,
+  panel_probability,
+  levels = c("Control", "RA")
+)
+
+panel_auc <- auc(
+  panel_roc
+)
+
+cat(
+  "Four-gene panel AUC:",
+  panel_auc,
+  "\n"
+)
+
+write.csv(
+  data.frame(
+    Model = "IL1B_TNF_IL6_CTNNB1",
+    AUC = as.numeric(panel_auc)
+  ),
+  "RA_Analysis/10_ROC/Four_Gene_Panel_AUC.csv",
+  row.names = FALSE
+)
+
+
+# ==========================================================
+# 31. FOUR-GENE ROC FIGURE
+# ==========================================================
+
+pdf(
+  "RA_Analysis/10_ROC/Four_Gene_Combined_ROC.pdf",
+  width = 7,
+  height = 7
+)
+
+plot(
+  panel_roc,
+  main = paste0(
+    "Four-Gene Diagnostic Panel\nAUC = ",
+    round(panel_auc, 3)
+  ),
+  lwd = 3
+)
+
+dev.off()
+
+
+# ==========================================================
+# 32. CLASSIFIER COMPARISON
+# ==========================================================
+
+# Four-gene expression matrix
+
+classifier_data <- panel_df
+
+ctrl <- trainControl(
+  method = "LOOCV",
+  classProbs = TRUE,
+  savePredictions = "final"
+)
+
+
+# Logistic Regression
+
+set.seed(123)
+
+model_glm <- train(
+  Group ~ .,
+  data = classifier_data,
+  method = "glm",
+  family = "binomial",
+  trControl = ctrl
+)
+
+
+# Random Forest
+
+set.seed(123)
+
+model_rf <- train(
+  Group ~ .,
+  data = classifier_data,
+  method = "rf",
+  trControl = ctrl
+)
+
+
+# Naive Bayes
+
+set.seed(123)
+
+model_nb <- train(
+  Group ~ .,
+  data = classifier_data,
+  method = "naive_bayes",
+  trControl = ctrl
+)
+
+
+# SVM
+
+set.seed(123)
+
+model_svm <- train(
+  Group ~ .,
+  data = classifier_data,
+  method = "svmRadial",
+  trControl = ctrl
+)
+
+
+# ==========================================================
+# 33. SAVE MACHINE LEARNING MODELS
+# ==========================================================
+
+saveRDS(
+  model_glm,
+  "RA_Analysis/09_Biomarker_Panel/GLM_Model.rds"
+)
+
+saveRDS(
+  model_rf,
+  "RA_Analysis/09_Biomarker_Panel/RF_Model.rds"
+)
+
+saveRDS(
+  model_nb,
+  "RA_Analysis/09_Biomarker_Panel/NaiveBayes_Model.rds"
+)
+
+saveRDS(
+  model_svm,
+  "RA_Analysis/09_Biomarker_Panel/SVM_Model.rds"
+)
+
+
+# ==========================================================
+# 34. EXPORT FINAL RESULTS
+# ==========================================================
+
+write.xlsx(
+  list(
+    All_DEGs = res,
+    Significant_DEGs = deg,
+    Upregulated = upregulated,
+    Downregulated = downregulated,
+    LASSO = data.frame(Gene = lasso_genes),
+    RandomForest = rf_importance,
+    SVM_RFE = data.frame(Gene = svm_selected),
+    Consensus = data.frame(Gene = consensus),
+    Four_Gene_Panel = data.frame(
+      Gene = available_panel
+    ),
+    ROC_AUC = roc_table
+  ),
+  file =
+    "RA_Analysis/13_Final_Tables/RA_Complete_Results.xlsx",
+  overwrite = TRUE
+)
+
+
+# ==========================================================
+# 35. FINAL SUMMARY
+# ==========================================================
+
+cat("\n")
+cat("=========================================\n")
+cat("RA ANALYSIS COMPLETED\n")
+cat("=========================================\n")
+cat("Total genes:", nrow(counts), "\n")
+cat("Filtered genes:", nrow(counts_filtered), "\n")
+cat("Total DEGs:", nrow(deg), "\n")
+cat("Upregulated:", nrow(upregulated), "\n")
+cat("Downregulated:", nrow(downregulated), "\n")
+cat("LASSO genes:", length(lasso_genes), "\n")
+cat("SVM-RFE genes:", length(svm_selected), "\n")
+cat("Consensus genes:", length(consensus), "\n")
+cat("Four-gene panel:",
+    paste(available_panel, collapse = ", "),
+    "\n")
+cat("Panel AUC:",
+    round(as.numeric(panel_auc), 3),
+    "\n")
+cat("=========================================\n")
+
+
+############################################################
+# END OF R ANALYSIS
+############################################################
