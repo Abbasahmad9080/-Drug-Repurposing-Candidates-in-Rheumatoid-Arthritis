@@ -1,0 +1,322 @@
+"gene","drug","status","approval","score"
+"TNF","NERELIMOMAB","Not Approved","",0.561331167299844
+"TNF","CROMOLYN SODIUM","Approved","",0.561331167299844
+"TNF","PLACULUMAB","Not Approved","",0.561331167299844
+"TNF","METHYLENE BLUE","Not Approved","",0.0623701296999827
+"TNF","ALTEPLASE","Approved","Thrombolytic agent",0.0534601111714137
+"TNF","CARBOPLATIN","Approved","",0.0130542131930196
+"TNF","GENTAMICIN","Approved","",0.0488114058521604
+"TNF","GOLIMUMAB","Approved","DMARD",NA
+"antiinflammatory agent",NA,NA,NA,NA
+"Immunosuppressive Agents","2.245324669199378",NA,NA,NA
+"TNF","BUPIVACAINE","Approved","neuralgia",NA
+"analgesic",NA,NA,NA,NA
+"local anestethic",NA,NA,NA,NA
+"Local",NA,NA,NA,NA
+"Anesthetics","0.06603896085880523",NA,NA,NA
+"TNF","PENTOXIFYLLINE","Approved","for treatment of amyotrophic lateral sclerosis (ALS)",0.0160380333514241
+"TNF","BENZO[E]PYRENE","Not Approved","",0.187110389099948
+"TNF","THALIDOMIDE","Approved","antineoplastic agent",0.0455133378891766
+"TNF","PYRAZINAMIDE","Approved","",0.129537961684579
+"TNF","GLIMEPIRIDE","Approved","antidiabetic",0.140332791824961
+"TNF","OMEPRAZOLE","Approved","antiulcer agent",NA
+"Proton pump inhibitor","0.03034222525945105",NA,NA,NA
+"TNF","LENERCEPT","Not Approved","",0.561331167299844
+"TNF","ADALIMUMAB","Approved","DMARD",NA
+"antiinflammatory agent","0.06804014149089023",NA,NA,NA
+"TNF","PRAZOSIN HYDROCHLORIDE","Approved","",0.112266233459969
+"TNF","REMTOLUMAB","Not Approved","",0.280665583649922
+"TNF","MIDOSTAURIN","Approved","antineoplastic agent",0.0320760667028483
+"TNF","LENABASUM","Not Approved","",0.187110389099948
+"TNF","MAGNESIUM SULFATE ANHYDROUS","Approved","",0.280665583649922
+"TNF","PICIBANIL","Not Approved","",0.224532466919938
+"TNF","FLUOCINOLONE ACETONIDE","Approved","glucocorticoid",NA
+"antiinflammatory agent","0.2245324669199377",NA,NA,NA
+"TNF","MILTEFOSINE","Approved","",0.187110389099948
+"TNF","HOMIDIUM BROMIDE","Not Approved","",0.0193562471482705
+"TNF","OZORALIZUMAB","Not Approved","DMARD",NA
+"antiinflammatory agent","1.122662334599689",NA,NA,NA
+"TNF","PEGSUNERCEPT","Not Approved","",1.12266233459969
+"TNF","CERTOLIZUMAB PEGOL","Approved","DMARD",NA
+"antiinflammatory agent","0.3207606670284825",NA,NA,NA
+"TNF","THERAPEUTIC HORMONE","Not Approved","",0.0255150530590838
+"TNF","NAFAMOSTAT","Not Approved","",0.0510301061181677
+"TNF","FOLIC ACID","Approved","",0.046777597274987
+"TNF","ABBV-257","Not Approved","",0.280665583649922
+"TNF","RISPERIDONE","Approved","Antipsychotic Agents",NA
+"antipsychotic agent","0.02513423137163482",NA,NA,NA
+"TNF","COVA322","Not Approved","",0.280665583649922
+"TNF","HYDROXYCHLOROQUINE","Approved","antirheumatic agent",0.0623701296999827
+"TNF","CERTOLIZUMAB","Not Approved","",0.561331167299844
+"TNF","AN0128","Not Approved","",0.561331167299844
+"TNF","5",NA,NA,NA
+"7-DIHYDROXY-4-METHYLCOUMARIN","Not Approved","","0.1403327918249611",NA
+"TNF","SORAFENIB","Approved","antineoplastic agent",0.00976228117043208
+"TNF","AFELIMOMAB","Not Approved","",0.561331167299844
+"TNF","PLACULUMAB","Not Approved","DMARD",NA
+"antiinflammatory agent","1.122662334599689",NA,NA,NA
+"TNF","INFLIXIMAB","Approved","DMARD",NA
+"antiinflammatory agent","0.07242982803868961",NA,NA,NA
+"TNF","DIDANOSINE","Approved","",0.0801901667571206
+"TNF","ISIS 104838","Not Approved","DMARD",NA
+"antiinflammatory agent","0.5613311672998444",NA,NA,NA
+"TNF","SOBLIDOTIN","Not Approved","",0.0660389608588052
+"TNF","SPIRONOLACTONE","Approved","antihypertensive agent",0.0701663959124806
+"TNF","MEROPENEM ANHYDROUS","Approved","",1.12266233459969
+"TNF","ETHAMBUTOL HYDROCHLORIDE","Approved","",0.420998375474883
+"TNF","MYCOPHENOLATE MOFETIL","Approved","immunosuppressant",0.0701663959124806
+"TNF","MASOPROCOL","Approved","prostate cancer",NA
+"antineoplastic agent","0.02388643265105721",NA,NA,NA
+"TNF","DERSALAZINE","Not Approved","for treatment of ulcerative colitis",NA
+"antiinflammatory agent","0.1403327918249611",NA,NA,NA
+"TNF","AVX-470","Not Approved","for treatment of ulcerative colitis",1.12266233459969
+"TNF","AME-527","Not Approved","DMARD",NA
+"antiinflammatory agent","0.5613311672998444",NA,NA,NA
+"TNF","CYCLOSPORINE","Approved","immunosuppressant",NA
+"opthalmological agent","0.01290416476551366",NA,NA,NA
+"TNF","ONERCEPT","Not Approved","",0.561331167299844
+"TNF","CYT007-TNFQB","Not Approved","antipsoriatic",NA
+"antiinflammatory vaccine","0.5613311672998444",NA,NA,NA
+"TNF","PROPYLTHIOURACIL","Approved","Antithyroid Agents",0.0561331167299844
+"TNF","TIMOLOL MALEATE","Approved","",0.374220778199896
+"TNF","ABBV-3373","Not Approved","",0.187110389099948
+"TNF","METHIMAZOLE","Approved","Antithyroid Agents",0.0534601111714137
+"TNF","PF-04236921","Not Approved","for treatment of Chron's disease",NA
+"antiinflammatory agent","0.2806655836499222",NA,NA,NA
+"TNF","LACTULOSE","Approved","",0.280665583649922
+"TNF","HALOFUGINONE","Not Approved","antineoplastic agent",0.187110389099948
+"TNF","PROTON PUMP INHIBITOR","Not Approved","",0.280665583649922
+"TNF","MITOMYCIN C ANALOG KW-2149","Not Approved","",1.12266233459969
+"TNF","ATORVASTATIN CALCIUM TRIHYDRATE","Approved","anticholesterolaemic agent",NA
+"antihypecholesterolemic agent","0.03061806367090061",NA,NA,NA
+"TNF","DIGOXIN","Approved","Anti-Arrhythmia Agents; Cardiotonic Agents",0.0165097402147013
+"TNF","PROCARBAZINE HYDROCHLORIDE","Approved","",0.561331167299844
+"TNF","LAPACHONE","Not Approved","",0.0431793205615265
+"TNF","ORTATAXEL","Not Approved","antineoplastic agent",0.187110389099948
+"TNF","IMMUNOSTIMULANT","Not Approved","",1.12266233459969
+"TNF","RABEPRAZOLE","Approved","Proton pump inhibitor",0.0431793205615265
+"TNF","RIFAMPIN","Approved","",0.0601426250678405
+"TNF","PNEUMOCOCCAL POLYVALENT VACCINE","Not Approved","",1.12266233459969
+"TNF","CEFOTAXIME SODIUM","Approved","",0.112266233459969
+"TNF","ETANERCEPT","Approved","DMARD",NA
+"antiinflammatory agent","0.086358641123053",NA,NA,NA
+"TNF","AZ9773","Not Approved","",0.561331167299844
+"TNF","TETRANDRINE","Not Approved","",0.374220778199896
+"TNF","REMTOLUMAB","Not Approved","",0.280665583649922
+"TNF","CELASTROL","Not Approved","",0.112266233459969
+"TNF","LENALIDOMIDE","Approved","antineoplastic agent",0.086358641123053
+"TNF","HUANG LIAN","Not Approved","",1.12266233459969
+"TNF","ANESTHETIC AGENT","Not Approved","",0.112266233459969
+"TNF","STAVUDINE","Approved","",0.086358641123053
+"TNF","CARBAMAZEPINE","Approved","for treatment of bipolar disorder",0.0458229524326404
+"TNF","AMPHOTERICIN B LIPOSOMAL","Approved","",0.0431793205615265
+"TNF","INSULIN",NA,NA,NA
+" REGULAR",NA,NA,NA,NA
+" HUMAN","Approved","for treatment of diabetic foot ulcers",NA,NA
+"antidiabetic","0.03177346229999119",NA,NA,NA
+"TNF","BACILLUS CALMETTE-GUERIN ANTIGEN","Not Approved","",0.0935551945499741
+"TNF","RUTIN","Approved","",0.112266233459969
+"TNF","VITAMIN B6","Approved","",0.187110389099948
+"TNF","MIDAZOLAM HYDROCHLORIDE","Approved","Anesthesia; Hypnotics and Sedatives",NA
+"Adjuvants","0.03118506484999135",NA,NA,NA
+"TNF","GEMCITABINE","Approved","antineoplastic agent",0.0122028514630401
+"IL6","CISPLATIN","Approved","",0.00724750778271353
+"IL6","ZILTIVEKIMAB","Not Approved","",1.06538364405889
+"IL6","CHINESE HERBS","Not Approved","",0.532691822029444
+"IL6","PF-04236921","Not Approved","for treatment of Chron's disease",NA
+"antiinflammatory agent","1.065383644058888",NA,NA,NA
+"IL6","MRA 003 US","Not Approved","",1.06538364405889
+"IL6","SIGNAL TRANSDUCTION INHIBITOR","Not Approved","",0.532691822029444
+"IL6","BINETRAKIN","Not Approved","",0.426153457623555
+"IL6","IBUDILAST","Approved","neuroprotectant",0.0665864777536805
+"IL6","INSULIN",NA,NA,NA
+" REGULAR",NA,NA,NA,NA
+" HUMAN","Approved","for treatment of diabetic foot ulcers",NA,NA
+"antidiabetic","0.0402031563795807",NA,NA,NA
+"IL6","SILTUXIMAB","Approved","",2.13076728811778
+"IL6","METRONIDAZOLE","Approved","",0.532691822029444
+"IL6","CLAZAKIZUMAB","Not Approved","antineoplastic agent",4.26153457623555
+"IL6","GALLIUM NITRATE","Approved","",0.304395326873968
+"IL6","INTERFERON ALFA-2B","Approved","for treatment of hepatitis C",NA
+"Antineoplastic Agents; Immunomodulatory Agents",NA,NA,NA,NA
+"for treatment of hepatitis B and C",NA,NA,NA,NA
+"for treatment of hepatitis","0.152197663436984",NA,NA,NA
+"IL6","DULOXETINE HYDROCHLORIDE","Approved","antidepressant",0.0819525880045299
+"IL6","MEDI-5117","Not Approved","",1.06538364405889
+"IL6","GEMFIBROZIL","Approved","Antilipemic Agents",0.16390517600906
+"IL6","BIAFINE CREAM","Not Approved","",2.13076728811778
+"IL6","ETANERCEPT","Approved","DMARD",NA
+"antiinflammatory agent","0.08195258800452988",NA,NA,NA
+"IL6","ELSILIMOMAB","Not Approved","",1.06538364405889
+"IL6","SAQUINAVIR","Approved","",0.236751920901975
+"IL6","INFLIXIMAB","Approved","DMARD",NA
+"antiinflammatory agent","0.06873442864896054",NA,NA,NA
+"IL6","LINEZOLID","Approved","",0.236751920901975
+"IL6","IFOSFAMIDE","Approved","Antineoplastic Agents",0.152197663436984
+"IL6","OLOKIZUMAB","Not Approved","DMARD",NA
+"antiinflammatory agent","4.261534576235554",NA,NA,NA
+"IL6","HMG-COA REDUCTASE INHIBITOR","Not Approved","",0.532691822029444
+"IL6","MIDOSTAURIN","Approved","antineoplastic agent",0.0608790653747936
+"IL6","SELENIUM","Approved","",0.125339252242222
+"IL6","SIRUKUMAB","Not Approved","DMARD",NA
+"antiinflammatory agent","1.065383644058888",NA,NA,NA
+"IL6","PEGINTERFERON ALFA-2B","Approved","",0.0998797166305208
+"IL6","ECHINACEA PREPARATION","Approved","",0.532691822029444
+"IL6","ENZYME INHIBITOR","Not Approved","",0.177563940676481
+"IL6","FENOFIBRATE MICRONIZED","Approved","anticholesterolaemic agent",NA
+"antidyslipidaemic agent","0.08195258800452988",NA,NA,NA
+"IL6","VITAMIN K","Approved","Antifibrinolytic Agents",0.236751920901975
+"IL6","PEGINTERFERON ALFA-2A","Approved","Antineoplastic Agents; Immunomodulatory Agents",NA
+"for treatment of hepatitis B and C","0.1102121011095401",NA,NA,NA
+"IL6","RIBAVIRIN","Approved","",0.0841092350572807
+"IL6","VITAMIN A PALMITATE","Approved","",0.710255762705926
+"IL6","ARSENIC TRIOXIDE","Approved","antineoplastic agent",0.0819525880045299
+"IL6","DIHYDROSPHINGOSINE","Not Approved","",0.355127881352963
+"IL6","LEVOFLOXACIN ANHYDROUS","Approved","",0.355127881352963
+"IL6","YSIL6","Not Approved","",1.06538364405889
+"IL6","NELFINAVIR","Approved","",0.355127881352963
+"IL6","RITUXIMAB","Approved","antineoplastic agent",0.0591879802254938
+"IL6","CLAZAKIZUMAB","Not Approved","",1.06538364405889
+"IL6","SELECTIVE ESTROGEN RECEPTOR MODULATOR","Not Approved","",0.355127881352963
+"IL6","IMIPENEM-CILASTATIN SODIUM","Not Approved","",2.13076728811778
+"IL6","FENTANYL CITRATE","Approved","adjuvant to anesthesia",NA
+"opioid",NA,NA,NA,NA
+"analgesic","0.07102557627059257",NA,NA,NA
+"IL6","ZILTIVEKIMAB","Not Approved","",0.532691822029444
+"IL6","ADALIMUMAB","Approved","DMARD",NA
+"antiinflammatory agent","0.06456870570053869",NA,NA,NA
+"CTNNB1","PP1","Not Approved","",0.1318277741386
+"CTNNB1","PF-670462","Not Approved","",0.1977416612079
+"CTNNB1","MPI-0479605","Not Approved","",0.527311096554399
+"CTNNB1","SKF-86002","Not Approved","",0.395483322415799
+"CTNNB1","SB203580","Not Approved","",0.0272747118907448
+"CTNNB1","IMATINIB","Approved","antineoplastic agent",0.0219712956897666
+"CTNNB1","MAPK13-IN-1","Not Approved","",0.395483322415799
+"CTNNB1","BAY1217389","Not Approved","",0.527311096554399
+"CTNNB1","NIROGACESTAT","Approved","",0.0564976174879714
+"CTNNB1","NMS-P715","Not Approved","",0.790966644831599
+"CTNNB1","ACUMAPIMOD","Not Approved","",0.395483322415799
+"CTNNB1","EOSIN_Y","Not Approved","",1.5819332896632
+"CTNNB1","DILMAPIMOD","Not Approved","DMARD",NA
+"antiinflammatory agent","0.3954833224157995",NA,NA,NA
+"CTNNB1","PRI-724","Not Approved","",0.395483322415799
+"CTNNB1","MW150","Not Approved","",0.790966644831599
+"CTNNB1","COMPOUND 12 [PMID: 22521646]","Not Approved","",0.790966644831599
+"CTNNB1","BMS-582949","Not Approved","",0.790966644831599
+"CTNNB1","OSUGACESTAT","Not Approved","",0.395483322415799
+"CTNNB1","AZD7624","Not Approved","",0.395483322415799
+"CTNNB1","VANTICTUMAB","Not Approved","",0.225990469951885
+"CTNNB1","ANTI-PD-L1 MONOCLONAL ANTIBODY","Not Approved","",0.1977416612079
+"CTNNB1","LOSMAPIMOD","Not Approved","",0.2636555482772
+"CTNNB1","LENALIDOMIDE","Approved","antineoplastic agent",0.121687176127938
+"CTNNB1","NDPPC","Not Approved","",0.790966644831599
+"CTNNB1","CELECOXIB","Approved","NSAID",0.0236109446218388
+"CTNNB1","TRAMETINIB DIMETHYL SULFOXIDE","Approved","antineoplastic agent",0.033658155099217
+"CTNNB1","DORAMAPIMOD","Not Approved","",0.034389854123113
+"CTNNB1","CHEMBL:CHEMBL2172378","Not Approved","",1.5819332896632
+"CTNNB1","RECOMBINANT HUMAN ENDOSTATIN","Not Approved","",0.790966644831599
+"CTNNB1","TRICIRIBINE","Not Approved","antineoplastic agent",0.2636555482772
+"CTNNB1","TEMSIROLIMUS","Approved","antineoplastic agent",0.10546221931088
+"CTNNB1","AZD6703","Not Approved","",0.395483322415799
+"CTNNB1","SAM68 MODULATOR CWP232291","Not Approved","",0.790966644831599
+"CTNNB1","NEFLAMAPIMOD","Not Approved","",0.1318277741386
+"CTNNB1","LETROZOLE","Approved","antineoplastic agent",0.0439425913795333
+"CTNNB1","VX-702","Not Approved","",0.395483322415799
+"CTNNB1","7-HYDROXYSTAUROSPORINE","Not Approved","",0.0608435880639692
+"CTNNB1","TAK-715","Not Approved","",0.395483322415799
+"CTNNB1","FLUORESCEIN SODIUM","Approved","",1.5819332896632
+"CTNNB1","PEXMETINIB","Not Approved","for treatment of myelodysplastic syndrome",0.0439425913795333
+"CTNNB1","CHEMBL:CHEMBL91638","Not Approved","",0.790966644831599
+"CTNNB1","COMPOUND 4E [PMID: 35546685]","Not Approved","",0.1977416612079
+"CTNNB1","CHEMBL:CHEMBL533293","Not Approved","",0.0719060586210545
+"CTNNB1","MPS1-IN-1","Not Approved","",0.790966644831599
+"CTNNB1","CETUXIMAB","Approved","antineoplastic agent",0.042754953774681
+"CTNNB1","PF-03715455","Not Approved","",0.2636555482772
+"CTNNB1","CHEMBL:CHEMBL410484","Not Approved","",0.0988708306039499
+"CTNNB1","ARRY-371797","Not Approved","antineoplastic agent",0.1318277741386
+"CTNNB1","DEXAMETHASONE","Approved","for treatment of Meniere's disease",NA
+"glucocorticoid",NA,NA,NA,NA
+"antiinflammatory agent","0.01861097987839056",NA,NA,NA
+"CTNNB1","PAMAPIMOD","Not Approved","",0.1318277741386
+"CTNNB1","ANTI-CTLA-4 MONOCLONAL ANTIBODY","Not Approved","",0.790966644831599
+"CTNNB1","PH-797804","Not Approved","",0.395483322415799
+"CTNNB1","DITHIAZANINE IODIDE","Not Approved","",0.0608435880639692
+"CTNNB1","SB220025","Not Approved","",0.0255150530590838
+"CTNNB1","CEQ508","Not Approved","antineoplastic agent",2.3728999344948
+"CTNNB1","CABOZANTINIB S-MALATE","Approved","antineoplastic agent",0.0719060586210545
+"CTNNB1","SB202190","Not Approved","",0.0219712956897666
+"CTNNB1","RALIMETINIB","Not Approved","",0.1977416612079
+"CTNNB1","TALMAPIMOD","Not Approved","DMARD",NA
+"antiinflammatory agent","0.2636555482771996",NA,NA,NA
+"CTNNB1","CBS-3595","Not Approved","",0.2636555482772
+"CTNNB1","THALIDOMIDE","Approved","antineoplastic agent",0.042754953774681
+"CTNNB1","EMPESERTIB","Not Approved","",0.527311096554399
+"CTNNB1","SORAFENIB","Approved","antineoplastic agent",0.0137559416492452
+"CTNNB1","OSIMERTINIB","Approved","",0.112995234975943
+"CTNNB1","CYCLOPHOSPHAMIDE ANHYDROUS","Approved","",0.0195300406131259
+"CTNNB1","EVEROLIMUS","Approved","immunosuppressant",0.0697911745439646
+"IL1B","ASPIRIN","Approved","NSAID",0.0230023346811569
+"IL1B","MAFOSFAMIDE","Not Approved","",0.51180194665574
+"IL1B","DIACETYLRHEIN","Approved","antidiabetic",0.227467531846996
+"IL1B","INFLIXIMAB","Approved","DMARD",NA
+"antiinflammatory agent","0.09905844128820783",NA,NA,NA
+"IL1B","LANSOPRAZOLE","Approved","Proton pump inhibitor",NA
+"antiulcer agent","0.07059337195251592",NA,NA,NA
+"IL1B","TILUDRONIC ACID","Approved","Bisphosphonates",0.682402595540987
+"IL1B","GEVOKIZUMAB","Not Approved","antidiabetic",3.07081167993444
+"IL1B","LUTIKIZUMAB","Not Approved","",1.02360389331148
+"IL1B","CELASTROL","Not Approved","",0.204720778662296
+"IL1B","CYTARABINE","Approved","antineoplastic agent",0.025590097332787
+"IL1B","RILONACEPT","Approved","DMARD",NA
+"antiinflammatory agent","0.6824025955409873",NA,NA,NA
+"IL1B","TT-301","Not Approved","",2.04720778662296
+"IL1B","METFORMIN","Approved","antidiabetic",0.0499318972347064
+"IL1B","ANTICONVULSANT AGENT","Not Approved","",0.136480519108197
+"IL1B","ANTIDEPRESSANT AGENT","Not Approved","",0.03936938051198
+"IL1B","ACITRETIN","Approved","Keratolytic Agents",0.191925729995903
+"IL1B","ERYTHROMYCIN","Approved","",0.0890090342009983
+"IL1B","ALTEPLASE","Approved","Thrombolytic agent",0.0974860850772839
+"IL1B","OFLOXACIN","Approved","",0.170600648885247
+"IL1B","PENTOXIFYLLINE","Approved","for treatment of amyotrophic lateral sclerosis (ALS)",0.0584916510463703
+"IL1B","USTEKINUMAB","Approved","Antipsoriatic Agents",NA
+"DMARD",NA,NA,NA,NA
+"antiinflammatory agent","0.102360389331148",NA,NA,NA
+"IL1B","LITHIUM","Approved","",0.0487430425386419
+"IL1B","RALOXIFENE HYDROCHLORIDE","Approved","Hormone Replacement Agents",0.0409441557324592
+"IL1B","MITOGEN-ACTIVATED PROTEIN KINASE INHIBITOR","Not Approved","",0.292458255231852
+"IL1B","DRUGSATFDA.NDA:008378","Not Approved","",0.227467531846996
+"IL1B","NICARDIPINE","Approved","Anti-Arrhythmia Agents; Antihypertensive Agents",0.127950486663935
+"IL1B","GLUCOSAMINE","Approved","",1.02360389331148
+"IL1B","BECLOMETHASONE DIPROPIONATE","Approved","glucocorticoid",NA
+"antiinflammatory agent","0.2047207786622961",NA,NA,NA
+"IL1B","PAREGORIC","Approved","analgesic",0.0445045171004992
+"IL1B","CEFACLOR ANHYDROUS","Approved","",0.146229127615926
+"IL1B","IBUDILAST","Approved","neuroprotectant",0.0639752433319676
+"IL1B","MELATONIN","Approved","Hypnotics and Sedatives",0.0705933719525159
+"IL1B","PENTAMIDINE","Approved","",2.04720778662296
+"IL1B","PRAVASTATIN SODIUM","Approved","anticholesterolaemic agent",NA
+"antihypecholesterolemic agent","0.07582251061566525",NA,NA,NA
+"IL1B","VERAPAMIL","Approved","antihypertensive agent",0.0454935063693992
+"IL1B","THYROGLOBULIN","Approved","",0.682402595540987
+"IL1B","RISEDRONIC ACID","Approved","Bisphosphonates",NA
+"antiosteoporotic agent","0.4094415573245923",NA,NA,NA
+"IL1B","AUTOANTIGEN","Not Approved","",0.682402595540987
+"IL1B","CDP-484","Not Approved","",1.02360389331148
+"IL1B","ETIDRONIC ACID","Approved","",0.146229127615926
+"IL1B","CHINESE HERBS","Not Approved","",0.51180194665574
+"IL1B","CANAKINUMAB","Approved","DMARD",NA
+"antiinflammatory agent","2.559009733278702",NA,NA,NA
+"IL1B","RESVERATROL","Approved","antineoplastic agent",NA
+"antidiabetic",NA,NA,NA,NA
+"for treatment of herpes simplex virus 1","0.04177975074740738",NA,NA,NA
+"IL1B","NIMUSTINE","Not Approved","",0.767702919983611
+"IL1B","FLUTICASONE","Approved","for treatment of symptomatic exophthalmos associated with thyroid-related eye disease",NA
+"bronchodilator",NA,NA,NA,NA
+"glucocorticoid",NA,NA,NA,NA
+"antiinflammatory agent","0.1077477782433137",NA,NA,NA
+"IL1B","GALLIUM NITRATE","Approved","",0.146229127615926
+"IL1B","HYDROQUINONE","Approved","",0.12042398744841
+"IL1B","POLYVALENT VACCINE","Not Approved","",2.04720778662296
+"IL1B","CLODRONIC ACID","Approved","antineoplastic agent",0.186109798783906
+"IL1B","ECHINACEA PREPARATION","Approved","",0.51180194665574
+"IL1B","HYDROCORTISONE BUTYRATE","Approved","",0.0487430425386419

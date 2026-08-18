@@ -1,0 +1,6 @@
+"Model","Accuracy","AUC","Sensitivity","Specificity"
+"Random Forest",0.958,1,0.889,1
+"Naive Bayes",1,1,1,1
+"SVM (Linear)",0.958,0.985,0.889,1
+"SVM (Radial)",0.917,0.985,0.889,0.933
+"Logistic Regression",0.917,0.937,0.778,1
